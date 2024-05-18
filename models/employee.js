@@ -11,6 +11,10 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
         autoIncrement: true,
       },
+      position: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       hospital_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -95,7 +99,8 @@ module.exports = function (sequelize, DataTypes) {
           fields: [{ name: "hospital_id" }],
         },
       ],
-    }
+          },
+    //position
   );
   // Static method
 

@@ -6,8 +6,42 @@ const myError = require("../utils/myError");
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 
+exports.getDoctors = asyncHandler(async (req, res, next) => {
+  console.log("PARAMS", req.params)
+  const doctor = await req.db.employee.findAll({
+    where: { role: "doctor" },
+  });
+
+  res.status(200).json({
+    success: true,
+    data: doctor,
+  });
+});
+
+exports.getDrivers = asyncHandler(async (req, res, next) => {
+  console.log("PARAMS", req.params)
+    const driver = await req.db.employee.findAll({
+      where: { role: "driver" },
+    });
+
+  res.status(200).json({
+    success: true,
+    data: driver,
+  });
+})
+
 exports.getEmployees = asyncHandler(async (req, res, next) => {
-  const employee = await req.db.employee.findAll();
+  console.log("PARAMS", req.params)
+  var role = req.params.role;
+  console.log(req.db)
+  if (role != undefined) {
+    const employee = await req.db.employee.findAll({
+      where: { role: role },
+    });
+  } else {
+    const employee = await req.db.employee.findAll();
+  }
+
   res.status(200).json({
     success: true,
     data: employee,
