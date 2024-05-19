@@ -16,7 +16,6 @@ const loginRoutes = require("./routes/login_routes");
 const registerRoutes = require("./routes/register_routes");
 
 const injectDb = require("./middleware/injectDb");
-const cron = require('node-cron');
 const db = require("./db-mysql");
 
 const app = express();
@@ -98,16 +97,16 @@ process.on("unhandledRejection", (err, promise) => {
 });
 
 // Function to update status from 'new' to 'going'
-const updateStatus = () => {
-  const query = `UPDATE orders SET status = 'going' WHERE status = 'new'`;
-  db.ssSequelize.query(query, { type: db.ssSequelize.QueryTypes.UPDATE })
-    .then(result => {
-      console.log(`Updated ${result[1]} rows`);
-    })
-    .catch(err => {
-      console.error('Error updating status:', err);
-    });
-};
+// const updateStatus = () => {
+//   const query = `UPDATE orders SET status = 'going' WHERE status = 'new'`;
+//   db.ssSequelize.query(query, { type: db.ssSequelize.QueryTypes.UPDATE })
+//     .then(result => {
+//       console.log(`Updated ${result[1]} rows`);
+//     })
+//     .catch(err => {
+//       console.error('Error updating status:', err);
+//     });
+// };
 
 // Schedule the updateStatus function to run every minute
 // cron.schedule('*/10 * * * * *', () => {
