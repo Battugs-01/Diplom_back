@@ -110,7 +110,7 @@ const updateStatus = () => {
 };
 
 // Schedule the updateStatus function to run every minute
-cron.schedule('*/10 * * * * *', () => {
-  console.log('Running updateStatus job');
-  updateStatus();
-});
+// cron.schedule('*/10 * * * * *', () => {
+//   console.log('Running updateStatus job');
+//   updateStatus();
+// });
