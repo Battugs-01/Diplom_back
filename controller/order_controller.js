@@ -6,15 +6,13 @@ exports.getOrders = asyncHandler(async (req, res, next) => {
   const orders = await req.db.order
     .scope({ method: ["filter_by_status", req.query.status] })
     .findAll({
-      include: ["user", "driver"],
-      // include: [
-      //   {
-      //     model: req.db.user,
-      //     association: "user",
-      //     required: true,
-      //     // attributes: ["name", "phone"],
-      //   },
-      // ],
+      include: ["user","driver"]
+    });
+    const doctors = await req.db.employee.findAll({
+      where: {
+        role: "doctor",
+        status: "active",
+      }
     });
   const orderStatusCounts = await req.db.order.findAll({
     attributes: [
@@ -30,7 +28,10 @@ exports.getOrders = asyncHandler(async (req, res, next) => {
     return result;
   }, {});
   console.log(total_count);
-
+  const doctor = doctors[0];
+  let result = orders.map(item => ({...item,doctor: doctor }));
+  console.log('----------result---------');
+  console.log(result);
   res.status(200).json({
     success: true,
     orders,
@@ -54,7 +55,7 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
       where: {
         [role[req.current_user.role]]: req.current_user.id,
       },
-      include: ["user", "driver"],
+      include: ["user", "driver","doctor"],
     });
   res.status(200).json({
     success: true,
@@ -70,7 +71,14 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     },
     attributes: ["id", "latitude", "longitude"],
   });
-
+  console.log(drivers);
+  const doctors = await req.db.employee.findAll({
+    where: {
+      role: "doctor",
+      status: "active",
+    }
+  });
+  console.log(doctors);
   const user = await req.db.user.findOne({
     where: { phone: req.body.phone },
   });
@@ -91,9 +99,9 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   // drivers.sort((a, b) => a.distance - b.distance);
 
-  // req.body.driver_id = drivers[0].id;
+  req.body.driver_id = drivers[0].id;
   req.body.user_id = user.id;
-
+  req.body.doctor_id = doctors[0].id;
   const order = await req.db.order.create(req.body);
   // await drivers[0].update({ status: "going" });
 

@@ -24,6 +24,14 @@ module.exports = function (sequelize, DataTypes) {
           key: "id",
         },
       },
+      doctor_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "employees",
+          key: "id",
+        },
+      },
       status: {
         type: Sequelize.ENUM,
         values: ["going", "new", "completed", "canceled"],
@@ -74,6 +82,11 @@ module.exports = function (sequelize, DataTypes) {
           name: "FK_order_2",
           using: "BTREE",
           fields: [{ name: "driver_id" }],
+        },
+        {
+          name: "FK_order_3",
+          using: "BTREE",
+          fields: [{ name: "doctor_id" }],
         },
       ],
     }
