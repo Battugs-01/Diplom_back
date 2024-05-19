@@ -35,6 +35,19 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     data: user,
   });
 });
+exports.getMe = asyncHandler(async (req,res,next) => {
+  const {phone} = req.query
+  const user  = await req.db.user.findOne({
+    where: {
+      phone: phone
+    }
+  })
+  console.log(user);
+  res.status(200).json({
+    success: true,
+    data: user.name,
+  });
+});
 
 exports.createUser = asyncHandler(async (req, res, next) => {
   if (
